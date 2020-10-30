@@ -11,6 +11,12 @@ To keep the Wifi load on the ESP8266 light, there is a single web page that is d
 
 The LED refresh rate runs at a constant rate (eg every 20ms) but this can be varied in the interface. Some of the other apps I looked at just seem to let the refresh happen whenever it can. I wanted to have a constant, dependable rate.
 
+## Hardware
+
+The circuit is pretty simple:
+
+![SJR-PixelStick circuit](images/SJRPS.PNG)
+
 ## Fixed mode
 
 In this mode you can choose to light up the array with between 1-5 individually selectable colours. They can be either in blocks or interleaved. For example, with four colours selected, you can either have groups of 36 LEDs in each of the four colours or each LED in each group of four LEDs is lit in one of the colours. In block mode, you can choose to have either blocks of solid colours or a gradual transition from one colour to the next as you work along the row of LEDs.
