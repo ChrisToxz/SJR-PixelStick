@@ -5,7 +5,7 @@ First up, let me state for the record that I am neither a C++ nor a Javascript p
 
 ## What it does
 
-The application drives a 1m (144 LED) array of WS2812B RGB LEDs. You can choose to display either fixed patterns, motion patterns or bitmaps on the array. I looked at several other implementations before deciding how to go about this. With the exception of the libraries I used and the motion patterns (thanks to those concerned), the code is my own.
+The application drives a 1m (144 LED) array of WS2812B RGB LEDs. You can choose to display either fixed patterns, motion patterns or bitmaps on the array. I looked at several other implementations before deciding how to go about this. With the exception of the libraries I used and the motion patterns (thanks to those concerned), the code is largely my own, but there are undoubtedly bits of other things in there, too.
 
 To keep the Wifi load on the ESP8266 light, there is a single web page that is downloaded when you connect to the array, along with a .css and a .js file. All interaction is then handled in the browser and commands/data exchanged via websockets.
 
