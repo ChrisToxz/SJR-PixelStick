@@ -1,0 +1,16 @@
+.svn
+.pio
+.vscode
+extras/Battery measurements.xlsx
+extras/config.json
+extras/D1 Mini SPI Flash Mode.txt
+extras/partial.bmp
+extras/SJR-PixelStick.cdr
+extras/srp.bmp
+extras/strings.bmp
+extras/ThisIsAVeryLongFilenameThatMightBreakSomething.bmp
+extras/whatnow.bmp
+extras/wps.bmp
+include/README
+lib/README
+test/README

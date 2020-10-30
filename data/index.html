@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SJR-PixelStick</title>
+	<link rel="stylesheet" href="css/pixelstick.min.css">
+</head>
+
+<body onload="startSocket()" onresize="showPreview()" disabled>
+	<div class="topnav" id="myTopnav">
+		<a id="select" onclick="toggleMenu()"><img id="menuicon" src="images/menu.png" alt="Menu" width="32"
+				height="20"></a>
+		<a id="fixed" onclick=setActivePage(this.id) class="active">Fixed</a>
+		<a id="preset" onclick=setActivePage(this.id)>Motion</a>
+		<a id="bitmap" onclick=setActivePage(this.id)>Images</a>
+		<a id="file" onclick=setActivePage(this.id)>Files</a>
+		<a id="wifi" onclick=setActivePage(this.id)>WiFi</a>
+		<div id="status">
+			<div id="sktled" class="led" width="24px" height="24px"></div>
+			<span id="voltage">0.0V</span>
+			<img src="images/batt-100.png" alt="Battery status" id="batticon" width="32" height="20">
+		</div>
+	</div>
+	<div id="general" style="margin:10px">
+		<button type="button" id="power" class="pushbtn" onclick="toggleLEDs()">LEDs On/Off</button>
+		<button type="button" id="save" class="pushbtn right" disabled onclick="saveSettings()">Save settings</button><br><br>
+		<label for="delay">Switch delay(0-60s):</label>
+		<input type="number" id="delay" name="delay" min="0" max="60" onchange="checkNumber(this.id, this.min, this.max)">
+		<div id="brightness" class="group">
+			<label class="label" for="britesld">Brightness:
+				<span id="britesldval" class="digits"></span></label><br>
+			<input id="britesld" class="slider" type="range" step="1" min="0" max="255"
+				oninput="updateSliderValue(this.id, this.value);setSlider(this.id)" />
+			<label class="label" for="timeslider">Refresh interval (ms):
+				<span id="timsldval" class="digits"></span></label><br>
+			<input id="timsld" class="slider" type="range" step="1" min="8" max="100" value="20"
+				oninput="updateSliderValue(this.id, this.value);setSlider(this.id)" /><br>
+		</div>
+	</div>
+	<div id="fixedpanel" class="page">
+		<p class="label head">Fixed colour(s)</p>
+		<div id="colour" class="group">
+			<p><strong>Presets</strong></p>
+			<label for="fixpresets" class="label">Select preset:</label>
+			<select id="fixpresets" onchange="setFixPreset()"></select><br>
+			<label for="fixname" class="label">Preset name:</label>
+			<input style="margin: 15px 0 0" type="text" id="fixname" minlength="1" maxlength="15" 
+				onchange="checkValid(this.id, this.minLength, this.maxLength)">
+			<button type="button" id="fpsave" class="spushbtn" style="margin-left:10px" disabled
+				onclick="saveFixPreset()">Save</button><br>
+			<small>15 characters max</small>
+			<p><strong>Number of colours</strong></p>
+			<input type="radio" id="col1" name="fixed" value="1" checked onclick="setColoursUsed(this.value)">
+			<label for="col1">1</label>
+			<input type="radio" id="col2" name="fixed" value="2" onclick="setColoursUsed(this.value)">
+			<label for="col2">2</label>
+			<input type="radio" id="col3" name="fixed" value="3" onclick="setColoursUsed(this.value)">
+			<label for="col3">3</label>
+			<input type="radio" id="col4" name="fixed" value="4" onclick="setColoursUsed(this.value)">
+			<label for="col4">4</label>
+			<input type="radio" id="col5" name="fixed" value="5" onclick="setColoursUsed(this.value)">
+			<label for="col5">5</label><br>
+			<span style="display: inline-block;margin: 15px 5px 0 0">
+				<input type="checkbox" id="gradient" onclick="setGradient(this.checked)"><label for="gradient">Gradient</label></span>
+			<span style="display: inline-block;margin: 15px 5px 0 5px">
+				<input type="checkbox" id="interleave" onclick="setInterleave(this.checked)"><label for="interleave">Interleave</label></span>
+			<p><strong>Colour pickers</strong></p>
+			<label for="picker0" class="label">Colour 1:</label>
+			<input type="color" id="picker0" name="colour0" onchange="updatePicker(this, true)">
+			<span id="pickedcolour0" class="digits"></span><br>
+			<label for="picker1" class="label">Colour 2:</label>
+			<input type="color" id="picker1" name="colour1" onchange="updatePicker(this, true)">
+			<span id="pickedcolour1" class="digits"></span><br>
+			<label for="picker2" class="label">Colour 3:</label>
+			<input type="color" id="picker2" name="colour" onchange="updatePicker(this, true)">
+			<span id="pickedcolour2" class="digits"></span><br>
+			<label for="picker3" class="label">Colour 4:</label>
+			<input type="color" id="picker3" name="colour" onchange="updatePicker(this, true)">
+			<span id="pickedcolour3" class="digits"></span><br>
+			<label for="picker4" class="label">Colour 5:</label>
+			<input type="color" id="picker4" name="colour" onchange="updatePicker(this, true)">
+			<span id="pickedcolour4" class="digits"></span><br>
+		</div>
+		<div id="coloursliders" class="group">
+			<p><strong>Edit RGB value (select picker number)</strong></p>
+			<input type="radio" id="edit0" name="edit" value="0" checked onclick="setPicker(this.value)">
+			<label for="edit0">1</label>
+			<input type="radio" id="edit1" name="edit" value="1" onclick="setPicker(this.value)">
+			<label for="edit1">2</label>
+			<input type="radio" id="edit2" name="edit" value="2" onclick="setPicker(this.value)">
+			<label for="edit2">3</label>
+			<input type="radio" id="edit3" name="edit" value="3" onclick="setPicker(this.value)">
+			<label for="edit3">4</label>
+			<input type="radio" id="edit4" name="edit" value="4" onclick="setPicker(this.value)">
+			<label for="edit4">5</label><br><br>
+			<label class="label" for="redslider">Red:
+				<span id="redsldval" class="digits"></span></label><br>
+			<input id="redsld" class="slider" type="range" step="1" min="0" max="255"
+				oninput="updateSliderValue(this.id, this.value);setSlider(this.id)" ><br>
+			<label class="label" for="greenslider">Green:
+				<span id="grnsldval" class="digits"></span></label><br>
+			<input id="grnsld" class="slider" type="range" step="1" min="0" max="255"
+				oninput="updateSliderValue(this.id, this.value);setSlider(this.id)" ><br>
+			<label class="label" for="blueslider">Blue:
+				<span id="blusldval" class="digits"></span></label><br>
+			<input id="blusld" class="slider" type="range" step="1" min="0" max="255"
+				oninput="updateSliderValue(this.id, this.value);setSlider(this.id)" >
+		</div>
+		<div id="sample" class="group" style="height:100px"></div>
+	</div>
+	<div id="presetpanel" class="page" style="display:none">
+		<p class="label head">Motion Presets</p>
+		<div class="group">
+			<label for="presets" class="label">Select preset:</label>
+			<select id="presets" onchange="setPreset()">
+			</select>
+		</div>
+		<div id="parms" class="group">
+			<p class="label"><strong>Parameters</strong></p>
+			<div id="parm0">
+				<label class="label" for="p0sld"><span id="p0name"></span>
+					<span id="p0sldval" class="digits"></span></label><br>
+				<input id="p0sld" class="slider" type="range" step="1" min="0" max="255"
+					oninput="updateSliderValue(this.id, this.value);setSlider(this.id)" />
+			</div>
+			<div id="parm1">
+				<label class="label" for="p1sld"><span id="p1name"></span>
+					<span id="p1sldval" class="digits"></span></label><br>
+				<input id="p1sld" class="slider" type="range" step="1" min="0" max="255"
+					oninput="updateSliderValue(this.id, this.value);setSlider(this.id)" />
+			</div>
+			<div id="parm2">
+				<label class="label" for="p2sld"><span id="p2name"></span>
+					<span id="p2sldval" class="digits"></span></label><br>
+				<input id="p2sld" class="slider" type="range" step="1" min="0" max="255"
+					oninput="updateSliderValue(this.id, this.value);setSlider(this.id)" />
+			</div>
+			<br>
+			<div id="palettes">
+				<label class="label" for="palette">Palette:</label>
+				<select id="palette" onchange="setPalette()"></select>
+			</div>
+		</div>
+	</div>
+	<div id="bitmappanel" class="page" style="display:none">
+		<p class="label head">Bitmaps</p>
+		<div class="group">
+			<label for="bitmaps" class="label">Select a bitmap:</label>
+			<select id="bitmaps" onchange="setCurrentBmp(this.value)"></select>
+			<button type="button" id="draw" class="spushbtn right" onclick="drawBitmap()">Draw</button>
+		</div>
+		<div class="group">
+			<p class="label">Dimensions:<span id="currentfile" class="digits"></span>
+				<span class="right" style="display: inline-block;margin: 5px"><input type="checkbox"
+						id="repeat" onclick="setRepeat(this.checked)"><label for="repeat">Repeat</label></span></p>
+			<p class="label">Time to display: <span id="drawtime" class="digits"></span></p>
+			<p class="label">Preview:</p>
+			<!-- See https://stackoverflow.com/questions/16301625/rotated-elements-in-css-that-affect-their-parents-height-correctly -->
+			<div class="rotation-wrapper-outer">
+				<div class="rotation-wrapper-inner">
+					<img id="preview">
+				</div>
+			</div>
+			<p id="prevtxt"><small><strong>Note:</strong>The LEDs display an image row-by-row sequentially,
+					bottom row to top row. This image is displayed rotated clockwise by 90&deg;
+					(the left-hand column is the bottom row of the image).</small></p>
+		</div>
+	</div>
+	<div id="filepanel" class="page" style="display:none">
+		<p class="label head">Files</p>
+		<div>
+			<form action="/upload" method="POST" enctype="multipart/form-data">
+				<label for="upload">Select a file to upload:</label>
+				<input type="file" id="upload" name="ulfile" accept=".bmp" onchange="checkFilename()">
+				<input type="submit" id="subupload" disabled>
+			</form>
+		</div>
+		<div class="group">
+			<label for="files" class="label">Select a bitmap file to delete:</label>
+			<select id="delete">
+			</select>
+			<button id="delbtn" onclick="deleteFile()">Delete</button>
+		</div>
+		<div class="group" style="background-color: lightgray">
+			<p style="padding: 5px;font-weight: bold">Filesystem Information</p>
+			<div style="padding: 5px" class="digits"><small id="fsinfo"></small></div>
+		</div>
+	</div>
+	<div id="wifipanel" class="page" style="display:none">
+		<p class="label head">WiFi</p>
+		<div class="group">
+			<p>Set the SSID and password for the access point created by the device. Changes will be active after a
+				reboot.</p>
+			<label for="apssid" class="label">AP SSID:</label><br>
+			<input type="text" id="apssid" maxlength="31"
+				onchange="checkValid(this.id, this.minLength, this.maxLength)">
+			<br><small>31 characters max</small><br><br>
+			<label for="appw" class="label">AP Password:</label><br>
+			<input type="password" id="appw" minlength="8" maxlength="15"
+				onchange="checkValid(this.id, this.minLength, this.maxLength)">
+			<span style="display: inline-block"><input id="show1" type="checkbox" onclick="togglePw('appw')"><label for="show1">Show</label></span>
+			<br><small>8-15 characters</small>
+			<hr>
+			<p>Set the SSID and password to connect to an existing network as a WiFi client
+				(press the user switch during power-on to enter client mode). Changes will be active after a reboot.</p>
+			<label for="clientssid" class="label">Network SSID:</label><br>
+			<input type="text" id="clientssid" maxlength="31"
+				onchange="checkValid(this.id, this.minLength, this.maxLength)">
+			<button type="button" id="store" class="spushbtn" style="margin-left:10px" disabled
+				onclick="saveCredentials()">Save</button>
+			<br><small>31 characters max</small><br><br>
+			<label for="clientpw" class="label">Network Password:</label><br>
+			<input type="password" id="clientpw" minlength="8" maxlength="63"
+				onchange="checkValid(this.id, this.minLength, this.maxLength)">
+			<span style="display: inline-block"><input id="show2" type="checkbox" onclick="togglePw('clientpw')"><label for="show2">Show</label></span>
+			<br><small>8-63 characters</small>
+			<p><small><strong>Note:</strong>These values are stored in non-volatile memory outside of the file system.
+					This feature is primarily intended for development use so the current settings are not
+					displayed.</small></p>
+		</div>
+	</div>
+	<script src="js/pixelstick.min.js"></script>
+</body>
+</html>

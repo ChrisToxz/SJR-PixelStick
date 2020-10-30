@@ -1,0 +1,5 @@
+JavaScript minimised with the Closure compiler:
+https://closure-compiler.appspot.com/home
+
+CSS minimised with csso:
+http://css.github.io/csso/csso.html
