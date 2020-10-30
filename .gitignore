@@ -1,7 +1,6 @@
 .svn
 .pio
 .vscode
-extras/Battery measurements.xlsx
 extras/config.json
 extras/D1 Mini SPI Flash Mode.txt
 extras/partial.bmp
@@ -14,3 +13,4 @@ extras/wps.bmp
 include/README
 lib/README
 test/README
+extras/Battery measurments.xlsx
