@@ -25,6 +25,8 @@ The circuit is pretty simple:
 
 ![SJR-PixelStick circuit](images/circuit.png)
 
+I used a 5A buck converter. If all 144 LEDs were fully illuminated in white, then the LEDs would need a little more than 8.5A so you do need to be aware of this. In practice, I've found 5A is plenty for typical patterns and images.
+
 ## Fixed mode
 
 In this mode you can choose to light up the array with between 1-5 individually selectable colours. They can be either in blocks or interleaved. For example, with four colours selected, you can either have groups of 36 LEDs in each of the four colours or each LED in each group of four LEDs is lit in one of the colours. In block mode, you can choose to have either blocks of solid colours or a gradual transition from one colour to the next as you work along the row of LEDs.
