@@ -15,22 +15,28 @@ The LED refresh rate runs at a constant rate (eg every 20ms) but this can be var
 
 The circuit is pretty simple:
 
-![SJR-PixelStick circuit](images/SJRPS.PNG)
+![SJR-PixelStick circuit](images/circuit.png)
 
 ## Fixed mode
 
 In this mode you can choose to light up the array with between 1-5 individually selectable colours. They can be either in blocks or interleaved. For example, with four colours selected, you can either have groups of 36 LEDs in each of the four colours or each LED in each group of four LEDs is lit in one of the colours. In block mode, you can choose to have either blocks of solid colours or a gradual transition from one colour to the next as you work along the row of LEDs.
 
+![Fixed mode display on smartphone](images/fixed.png) ![Fixed mode display on desktop](images/desktop.png)
+
 ## Motion mode
 
 A selection of preset animations is available. Some of these presets have parameters that can be adjusted to change the way the animation runs or, perhaps, the colour palette used.
 
+![Motion mode display on smartphone](images/motion.png)
 ## Bitmap mode
 
 In this mode, you can select a .bmp file stored in the ESP8266's file storage and it will be displayed column by column on the LED array (actually row by row as the image must be rotated).
 
+![Bitmap mode display on smartphone](images/bitmap.png)
 ## Other features
 
 - You can upload and delete .bmp files via the web interface.
 - You can change the SSID and PW needed to access the ESP8266 when in WAP mode
 - You can change the SSID and PW needed to connect the ESP8266 to another network in client mode
+
+![File management display on smartphone](images/files.png) ![WiFi management display on smartphone](images/wifi.png)
