@@ -11,6 +11,14 @@ To keep the Wifi load on the ESP8266 light, there is a single web page that is d
 
 The LED refresh rate runs at a constant rate (eg every 20ms) but this can be varied in the interface. Some of the other apps I looked at just seem to let the refresh happen whenever it can. I wanted to have a constant, dependable rate.
 
+## Operation
+
+When the device is first switched on, the LEDs flash red then green then blue to show it is alive. By default it enters WAP mode and this is indicated by a brief sweep of the LEDs in green. Connect your phone/laptop to the ESP8266's wifi and access webpage 192.168.4.1. My Android phone doesn't like mDNS and I didn't want to install Bonjour but you can use **sjrps.local** if your phone does. You'll see the inteface shown below and be able to control the pixelstick from it. If you hold the user switch closed until after the intial colour flashes as you power on, the device will attempt to connect to the WiFi network using the credentials in **secrets.h**. You can change these later via the web interface. A successful connection will be indicated by a sweep of the LEDs in blue rather than green. If there's a connection failure, the device drops back to WAP mode and a green sweep is seen instead.
+
+All communication after the web page is loaded is via websockets. The connection status is shown as a green or red indicator at the right hand end of the menu bar, next to the battery voltage indicators. The menu bar is responsive and looks a little different depending on the device you're viewing it on. If the indicator goes red for any reason, you can simply reconnect by reloading the web page. 
+
+Once it's up and running, you control the device from the web interface. If the LEDs are off, they can be activated in the current mode by pressing the user switch. After a short delay (user settable in the interface), the LEDs will operate in the selected mode.
+
 ## Hardware
 
 The circuit is pretty simple:
